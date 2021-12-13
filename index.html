@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <title>Jogo da Velha</title>
+</head>
+<body>
+    <div id="tabela">
+        <div class="linha" id="linha1">
+            <div class="casas" id="0,0">vazio</div>
+            <div class="casas" id="1,0">vazio</div>
+            <div class="casas" id="2,0">vazio</div>
+        </div>
+        <div class="linha" id="linha2">
+            <div class="casas" id="0,1">vazio</div>
+            <div class="casas" id="1,1">vazio</div>
+            <div class="casas" id="2,1">vazio</div>
+        </div>
+        <div class="linha" id="linha3">
+            <div class="casas" id="0,2">vazio</div>
+            <div class="casas" id="1,2">vazio</div>
+            <div class="casas" id="2,2">vazio</div>
+        </div>
+    </div>
+
+    <script>
+        let tabela = [[,,],[,,],[,,]];
+        for (let i=0; i<3; i++) {
+            for (let j=0; j<3; j++) {
+                tabela[i][j] = document.getElementById(`${i},${j}`);
+                tabela[i][j].addEventListener('click', () => {
+                    tabela[i][j].innerHTML = jogada(tabela[i][j].innerHTML, 'jogador1');
+                    let celulaAleatoria;
+                    celulaAleatoria = tabela[aleatorio()][aleatorio()];
+                    celulaAleatoria.innerHTML = jogada(celulaAleatoria.innerHTML, 'jogador2');
+                });
+            }
+        }
+        console.table(tabela);
+    </script>
+</body>
+</html>
