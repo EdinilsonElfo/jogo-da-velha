@@ -33,10 +33,18 @@
             for (let j=0; j<3; j++) {
                 tabela[i][j] = document.getElementById(`${i},${j}`);
                 tabela[i][j].addEventListener('click', () => {
-                    tabela[i][j].innerHTML = jogada(tabela[i][j].innerHTML, 'jogador1');
-                    let celulaAleatoria;
-                    celulaAleatoria = tabela[aleatorio()][aleatorio()];
-                    celulaAleatoria.innerHTML = jogada(celulaAleatoria.innerHTML, 'jogador2');
+                    if (tabela[i][j].innerHTML == 'vazio') {
+                        // ==================================================================
+                        //                         Jogada do Jogador
+                        // ==================================================================
+                        tabela[i][j].innerHTML = jogada(tabela[i][j].innerHTML, 'x');
+                        // ==================================================================
+                        //                       Jogada do Comptutador
+                        // ==================================================================
+                        let coordenas = jogadaPc(tabela)
+                        tabela[coordenas[0]][coordenas[1]].innerHTML = 'o';
+                        // ==================================================================
+                    }
                 });
             }
         }

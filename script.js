@@ -26,7 +26,7 @@ function condicaoVitoria(tabela){
 }
 
 function aleatorio() {
-    return Math.floor(Math.random()*3);
+    return Math.floor(Math.random() * 3);
 }
 
 function jogada(celulaHTML, jogador) {
@@ -36,5 +36,23 @@ function jogada(celulaHTML, jogador) {
     }
     else {
         return celulaHTML;
+    }
+}
+
+function suffleArray(array) {
+    for (let i=0; i<3; i++) {
+        for (let j=0; j<3; j++) {
+            const iRandom = aleatorio();
+            const jRandom = aleatorio();
+            [array[i][j], array[iRandom][jRandom]] = [array[iRandom][jRandom], array[i][j]]
+        }
+    }
+}
+
+function jogadaPc(tabela) {
+    for (let i=aleatorio(), j=aleatorio(); true; i=aleatorio(), j=aleatorio()) {
+        if(tabela[i][j].innerHTML == 'vazio') {
+            return [i, j];
+        }
     }
 }
