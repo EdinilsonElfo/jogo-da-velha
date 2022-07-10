@@ -1,3 +1,23 @@
+function getInnerHtml(tabela) {
+    const novaTabela;
+    for (let linha of tabela) {
+        for (let coluna of tabela[linha]) {
+            novaTabela[linha][coluna] = tabela[linha][coluna].innerHTML;
+        }
+    }
+    return novaTabela;
+}
+
+
+function vencedor([[c00,c01,c02],[c10,c11,c12],[c20,c21,c22]]) {
+    const tabela = [[c00,c01,c02],[c10,c11,c12],[c20,c21,c22]];
+    for (let linha of tabela) {
+        for (let coluna of tabela[linha]) {
+
+        }
+    }
+}
+
 function condicaoVitoria(tabela){
     // Condição horizontal
     for (let i=0; i<3; i++) {
