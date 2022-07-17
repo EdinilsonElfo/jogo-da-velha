@@ -12,43 +12,72 @@
     <div id="tabela">
         <div class="linha" id="linha1">
             <div class="casas" id="0,0">vazio</div>
-            <div class="casas" id="1,0">vazio</div>
-            <div class="casas" id="2,0">vazio</div>
+            <div class="casas" id="0,1">vazio</div>
+            <div class="casas" id="0,2">vazio</div>
         </div>
         <div class="linha" id="linha2">
-            <div class="casas" id="0,1">vazio</div>
+            <div class="casas" id="1,0">vazio</div>
             <div class="casas" id="1,1">vazio</div>
-            <div class="casas" id="2,1">vazio</div>
+            <div class="casas" id="1,2">vazio</div>
         </div>
         <div class="linha" id="linha3">
-            <div class="casas" id="0,2">vazio</div>
-            <div class="casas" id="1,2">vazio</div>
+            <div class="casas" id="2,0">vazio</div>
+            <div class="casas" id="2,1">vazio</div>
             <div class="casas" id="2,2">vazio</div>
         </div>
     </div>
 
     <script>
-        let tabela = [[,,],[,,],[,,]];
+        let arrayDiv = [[,,],[,,],[,,]];
+        let array = [[,,],[,,],[,,]];
+        let valor1 = 'o';
+        let valor2 = 'x';
+        let status1 = '';
+        let status2 = '';
+        let esc1 = [,]; // escolha do jogador 1
+        let esc2 = [,]; // escolha do jogador 2
+        let statusPartida = '';
+        let fim = false;
         for (let i=0; i<3; i++) {
             for (let j=0; j<3; j++) {
-                tabela[i][j] = document.getElementById(`${i},${j}`);
-                tabela[i][j].addEventListener('click', () => {
-                    if (tabela[i][j].innerHTML == 'vazio') {
-                        // ==================================================================
-                        //                         Jogada do Jogador
-                        // ==================================================================
-                        tabela[i][j].innerHTML = jogada(tabela[i][j].innerHTML, 'x');
-                        // ==================================================================
-                        //                       Jogada do Comptutador
-                        // ==================================================================
-                        let coordenas = jogadaPc(tabela)
-                        tabela[coordenas[0]][coordenas[1]].innerHTML = 'o';
-                        // ==================================================================
+                arrayDiv[i][j] = document.getElementById(`${i},${j}`);
+                array[i][j] = arrayDiv[i][j].innerHTML;
+                arrayDiv[i][j].addEventListener('click', () => {
+                    if (fim) return 'jogo acabou';
+
+                    // Jogada do Primeiro Jogador
+                    do {
+                        esc1 = [i,j];
+                        statusPartida = rodada(array, valor1, status1, esc1);
+                        arrayDiv[ esc1[0] ][ esc1[1] ].innerHTML = array[ esc1[0] ][ esc1[1] ];
+                    } while (statusPartida === 'repetir jogada');
+                    if (statusPartida === 'fim de jogo') {
+                        console.log('fim de jogo');
+                        fim = true;
                     }
-                });
+
+                    if ( !espacoLivre(array) ) {
+                        fim = true;
+                    }
+
+                    if (fim) return 'jogo acabou';
+
+                    // Jogado do PC
+                    do {
+                        esc2 = [aleatorio(), aleatorio()];
+                        statusPartida = rodada(array, valor2, status2, esc2);
+                        arrayDiv[ esc2[0] ][ esc2[1] ].innerHTML = array[ esc2[0] ][ esc2[1] ];
+                    } while (statusPartida === 'repetir jogada');
+                    if (statusPartida === 'fim de jogo') {
+                        console.log('fim de jogo');
+                        fim = true;
+                    }
+                    
+                    console.log(array);
+                }
+                );
             }
         }
-        console.table(tabela);
     </script>
 </body>
 </html>

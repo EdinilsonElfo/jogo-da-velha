@@ -1,78 +1,79 @@
-function getInnerHtml(tabela) {
-    const novaTabela;
-    for (let linha of tabela) {
-        for (let coluna of tabela[linha]) {
-            novaTabela[linha][coluna] = tabela[linha][coluna].innerHTML;
-        }
+function areEqual() { // função para verificar se varios argmuentos são iguais
+    for (let i = 1; i < arguments.length; i++) {
+        if (arguments[i] !== arguments[i-1]) return false;
     }
-    return novaTabela;
+    return true;
 }
 
-
-function vencedor([[c00,c01,c02],[c10,c11,c12],[c20,c21,c22]]) {
-    const tabela = [[c00,c01,c02],[c10,c11,c12],[c20,c21,c22]];
-    for (let linha of tabela) {
-        for (let coluna of tabela[linha]) {
-
-        }
-    }
-}
-
-function condicaoVitoria(tabela){
-    // Condição horizontal
-    for (let i=0; i<3; i++) {
-        if (tabela[i][0].innerHTML == tabela[i][1].innerHTML && tabela[i][0].innerHTML == tabela[i][2].innerHTML && tabela[i][0].innerHTML != 'vazio') {
-            let vencedor = tabela[i][0];
-            return `horizontal, jogador ${vencedor}`;
-        }
-    }
-    // Condição vertical
-    for (let j=0; j<3; j++) {
-        if (tabela[0][j].innerHTML == tabela[1][j].innerHTML && tabela[0][j].innerHTML == tabela[2][j].innerHTML && tabela[0][j].innerHTML != 'vazio') {
-            let vencedor = tabela[0][j];
-            return `vertical, jogador ${vencedor}`;
-        }
-    }
-    // Condição diagonal principal
-    if (tabela[0][0].innerHTML == tabela[1][1].innerHTML && tabela[0][0].innerHTML == tabela[2][2].innerHTML && tabela[1][1].innerHTML != 'vazio') {
-        let vencedor = tabela[1][1];
-        return `diagonal principal, jogador ${vencedor}`;
-    }
-    // Condição diagonal secundária
-    if (tabela[0][2].innerHTML == tabela[1][1].innerHTML && tabela[0][2].innerHTML == tabela[2][0].innerHTML && tabela[1][1].innerHTML != 'vazio') {
-        let vencedor = tabela[1][1];
-        return `diagonal secundária, jogador ${vencedor}`;
-    }
-}
-
-function aleatorio() {
+function aleatorio() { // função para retornar um número aleatório entre 0, 1 ou 2
     return Math.floor(Math.random() * 3);
 }
 
-function jogada(celulaHTML, jogador) {
-    if (celulaHTML == 'vazio') {
-        console.log('Jogador 1 jogou')
-        return jogador;
-    }
-    else {
-        return celulaHTML;
-    }
-}
-
-function suffleArray(array) {
+function suffleArray(array) { // função para embaralhar toda a matriz
     for (let i=0; i<3; i++) {
         for (let j=0; j<3; j++) {
             const iRandom = aleatorio();
             const jRandom = aleatorio();
-            [array[i][j], array[iRandom][jRandom]] = [array[iRandom][jRandom], array[i][j]]
+            [array[i][j], array[iRandom][jRandom]] = [array[iRandom][jRandom], array[i][j]]; // troca 2 valores na matriz
         }
     }
 }
 
-function jogadaPc(tabela) {
-    for (let i=aleatorio(), j=aleatorio(); true; i=aleatorio(), j=aleatorio()) {
-        if(tabela[i][j].innerHTML == 'vazio') {
-            return [i, j];
+function condicaoVitoria(array, valor) { // verifica se a condição de vitoria foi cumplida e retorna um status para o player
+    if ( areEqual(array[0][0], array[1][1], array[2][2], valor) ) return 'vencedor';
+    else if ( areEqual(array[0][2], array[1][1], array[2][0], valor) )return 'vencedor';
+    else if ( areEqual(array[0][0], array[0][1], array[0][2], valor) ) return 'vencedor';
+    else if ( areEqual(array[1][0], array[1][1], array[1][2], valor) ) return 'vencedor';
+    else if ( areEqual(array[2][0], array[2][1], array[2][2], valor) ) return 'vencedor';
+    else if ( areEqual(array[0][0], array[1][0], array[2][0], valor) ) return 'vencedor';
+    else if ( areEqual(array[0][1], array[1][1], array[2][1], valor) ) return 'vencedor';
+    else if ( areEqual(array[0][2], array[1][2], array[2][2], valor) ) return 'vencedor';
+    else return 'continuar';
+}
+
+function alguemVenceu(array, statusJogador1, statusJogador2) { // verifica se alguma jogador venceu, e retorna o resultado
+    if ( areEqual(statusJogador1, statusJogador2, 'continuar') ) {
+        for (let i=0; i<3; i++) {
+            for (let j=0; j<3; j++) {
+                if (array[i][j] == 'vazio') return 'partida ainda não terminou';
+            }
         }
     }
+    else if (statusJogador1 = 'vencedor') return 'jogador 1 venceu';
+    else if (statusJogador2 = 'vencedor') return 'jogador 2 venceu';
+    else return 'erro';
+}
+
+function escolhaIA() { // retorna um vetor descrevendo em qual posição a IA escolheu jogar
+    return [aleatorio(), aleatorio()];
+}
+
+function espacoLivre(array) { // retorna true se tem posição livre e false se não tem
+    for (let i=0; i<3; i++) {
+        for (let j=0; j<3; j++) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function verificarEscolha(array, escolha) { // verifica se a posição a ser jogadad é valida
+    if ( array[ escolha[0] ][ escolha[1] ] === 'vazio' ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function rodada(array, valor, statusJogador, escolha) {
+    if ( verificarEscolha(array, escolha) ) {
+        array[ escolha[0] ][ escolha[1] ] = valor;
+        statusJogador = condicaoVitoria(array, valor);
+        if (statusJogador === 'vencedor') {
+            console.log(`jogador ${valor} venceu`);
+            return 'fim de jogo';
+        }
+        return 'próxima rodada';
+    }
+    return 'repetir jogada';
 }
